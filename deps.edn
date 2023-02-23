@@ -1,0 +1,12 @@
+
+{
+ :paths ["src"]
+ :deps {
+        net.sourceforge.plantuml/plantuml {:mvn/version "1.2022.7"}
+        org.postgresql/postgresql {:mvn/version "42.2.12"}
+        org.clojure/java.jdbc {:mvn/version "0.7.12"}
+
+        ring/ring-core {:mvn/version "1.8.2"}
+        ring/ring-jetty-adapter {:mvn/version "1.8.2"}
+        }
+ }
