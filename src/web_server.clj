@@ -52,11 +52,11 @@
 
 (defn handle-adding-table [request]
   (let [tname (:query-string request)]
-    (reset! ctx { :db-url nil :table-names (conj (:table-names @ctx) tname) })
+    (swap! ctx #(assoc % :table-names (conj (:table-names %) tname)))
     (redirect-to-root)))  
 
-(defn handle-all [request]
-  (reset! ctx { :db-url (:db-url @ctx) :table-names (db/get-table-names (:db-url @ctx))})
+(defn handle-all [_]
+  (swap! ctx assoc :table-names (db/get-table-names (:db-url @ctx)))
   (redirect-to-root))
 
 (defn handle-display-database-tables []
