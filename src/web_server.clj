@@ -8,7 +8,6 @@
             [db]
             [bootstrap :as bs]
             [ring.util.codec]
-            [junkdrawer :as jd]
             [clojure.java.io]))
 
 (defn redirect-to-root []
