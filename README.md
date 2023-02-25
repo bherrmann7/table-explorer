@@ -14,7 +14,7 @@ $ clojure src/web_explorer
 
 To view, browse to http://localhost:3000
 
-
+A short demo of Table explorer is at,  https://youtu.be/SejOoCdCq3I
 
 TODO:
 
