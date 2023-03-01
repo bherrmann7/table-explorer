@@ -27,5 +27,4 @@ Currently, Table Explorer assumes that there is only one user accessing the web 
 
 Requiring an initial table is lame.  Allow choosing "all" and/or displaying all the table names and allow the user to choose an initial one (or many?) 
 
-Allow collapsing of tables
 
