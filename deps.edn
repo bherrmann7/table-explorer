@@ -2,7 +2,7 @@
 {
  :paths ["src"]
  :deps {
-        net.sourceforge.plantuml/plantuml {:mvn/version "1.2022.7"}
+        net.sourceforge.plantuml/plantuml {:mvn/version "1.2023.1"}
         org.postgresql/postgresql {:mvn/version "42.2.12"}
         org.clojure/java.jdbc {:mvn/version "0.7.12"}
 

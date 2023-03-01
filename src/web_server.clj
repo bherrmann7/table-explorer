@@ -36,8 +36,9 @@
 
 (defn svg-for-tables [db-url table-names]
   (try 
-  (let [table-metadatas (map #(db/get-table-metadata db-url %) table-names)
+  (let [table-metadatas (map #(db/get-table-metadata db-url %) (sort table-names))
         plantuml-txt (diagram-builder/generate table-metadatas)]
+    (spit "/tmp/diagram.pu" plantuml-txt)
     (plantuml-helper/generate-svg plantuml-txt))
   (catch Throwable t (str "<div>Problem rending graph</div><p><pre>" (.getMessage t)))))
 
@@ -46,35 +47,48 @@
     (reset! ctx { :db-url jurl :table-names #{init-table} })
     (redirect-to-root)))
 
-(defn handle-clear [request]
+(defn handle-reset [request]
   (reset! ctx { :db-url nil :table-names #{}})
   (redirect-to-root))  
 
-(defn handle-adding-table [request]
+(defn handle-add-table [request]
   (let [tname (:query-string request)]
     (swap! ctx #(assoc % :table-names (conj (:table-names %) tname)))
-    (redirect-to-root)))  
+    (redirect-to-root)))
+
+(defn handle-remove-table [request]
+  (let [tname (:query-string request)]
+    (swap! ctx #(assoc % :table-names (disj (:table-names %) tname)))
+    (redirect-to-root)))
+
 
 (defn handle-all [_]
-  (swap! ctx assoc :table-names (db/get-table-names (:db-url @ctx)))
+  (swap! ctx assoc :table-names (into #{} (db/get-table-names (:db-url @ctx))))
   (redirect-to-root))
 
 (defn handle-display-database-tables []
    (bs/wrap (str "Tables: " (cs/join " " (:table-names @ctx) )
-                 " &nbsp;<form style='display: inline' action=/clear >
-<button type='submit' class='btn btn-primary btn-sm' name=clear value=clear>clear</button></form>
+                 " &nbsp;<div style='float: right'>
+
 <form style='display: inline' action=/all >
-<button type='submit' class='btn btn-secondary btn-sm' name=all value=all>all</button>
-</form><p><br>" (svg-for-tables (:db-url @ctx) (:table-names @ctx)))))
+<button type='submit' class='btn btn-secondary btn-sm' name=all value=all>Add All Tables</button>
+</form>
+&nbsp;&nbsp;
+<form style='display: inline' action=/reset >
+  <button type='submit' class='btn btn-secondary btn-sm' name=reset value=reset>Reset</button>
+</form>
+
+</div><p><br>" (svg-for-tables (:db-url @ctx) (:table-names @ctx)))))
 
 (defn handler [request]
   (let [uri (:uri request)]
     (cond
       (.startsWith uri "/connect") (handle-connect request)
       (nil? (:db-url @ctx)) (bs/wrap table-form)
-      (.startsWith uri "/clear") (handle-clear request)
+      (.startsWith uri "/reset") (handle-reset request)
       (.startsWith uri "/all") (handle-all request)
-      (.startsWith uri "/add") (handle-adding-table request)
+      (.startsWith uri "/add") (handle-add-table request)
+      (.startsWith uri "/remove") (handle-remove-table request)
       :else (handle-display-database-tables))))
 
 

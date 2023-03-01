@@ -25,8 +25,6 @@ If you're interested in seeing Table Explorer in action, check out a short demo 
 
 Currently, Table Explorer assumes that there is only one user accessing the web application. However, this could be problematic if you were to share the URL with teammates, as they would all be logged into the same session. 
 
-Allow a table to be collapsed.
-
 Requiring an initial table is lame.  Allow choosing "all" and/or displaying all the table names and allow the user to choose an initial one (or many?) 
 
 Allow collapsing of tables
