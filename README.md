@@ -29,5 +29,3 @@ Requiring an initial table is lame.  Allow choosing "all" and/or displaying all 
 
 Allow collapsing of tables
 
-"All" means, to me, "add all tables into the diagram" - I will think about how to make that clearer.
-
