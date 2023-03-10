@@ -13,7 +13,7 @@ The postgres jdbc driver is presumed.   To add a different jdbc driver you need 
 
 To run Table Explorer, execute the following command in your terminal:
 
-$ clojure src/web_explorer
+$ clojure src/web_server.clj
 
 Then, open your web browser and navigate to http://localhost:3000
 
