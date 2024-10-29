@@ -3,10 +3,12 @@
  :paths ["src"]
  :deps {
         net.sourceforge.plantuml/plantuml {:mvn/version "1.2023.1"}
-        org.postgresql/postgresql {:mvn/version "42.2.12"}
         org.clojure/java.jdbc {:mvn/version "0.7.12"}
 
         ring/ring-core {:mvn/version "1.8.2"}
         ring/ring-jetty-adapter {:mvn/version "1.8.2"}
+
+        org.postgresql/postgresql {:mvn/version "42.2.12"}
+        com.oracle.database.jdbc/ojdbc8 {:mvn/version "23.5.0.24.07" }
         }
  }

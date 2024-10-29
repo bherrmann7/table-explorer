@@ -17,14 +17,40 @@
 
 (def ctx (atom {:db-url nil :table-names #{}}))
 
-(def table-form "
+(defn form [ fname example ]
+  (let [ htype (if (= fname "password") "password" "input")]
+  (str "<div class='row mb-3'>
+    <label for='l-" fname "' class='col-form-label col-sm-2'>" fname "</label>
+   <div class='col-sm-10'>
+      <input type=" htype" name='" fname "' class='form-control' id='l-" fname "'>
+      " example "
+  </div><br>" )))
+
+(def table-form (str "
 <div class='container'>
 <form action=/connect>
+
+<div>
+  
   <div class='mb-3'>
     <label for='j1' class='form-label'>Jdbc Connection URL</label>
     <input type='text' class='form-control' id='j1' name=jurl>
     For example: postgresql://myuser:secret@mydb.server.com:5432/mypgdatabase
   </div>
+
+  <b>OR</b>
+  <br>
+  "
+    (form "classname", "example; 'oracle.jdbc.OracleDriver'")
+    (form "subprotocol", "example; 'Oracle'")
+    (form "subname", "example; 'thin:@host:port/service'")
+    (form "user" nil)
+    (form "password" nil)
+  "
+  </div>
+
+<div/>
+
   <div class='mb-3'>
     <label for='it' class='form-label'>Initial Table</label>
     <input type='text' class='form-control' name=init-table id='j1'>
@@ -32,7 +58,7 @@
   <button type='submit' class='btn btn-primary'>Connect</button>
 </form>
 </div>
-")
+"))
 
 (defn svg-for-tables [db-url table-names]
   (try 
@@ -43,8 +69,17 @@
   (catch Throwable t (str "<div>Problem rending graph</div><p><pre>" (.getMessage t)))))
 
 (defn handle-connect [request]
-  (let [ {:strs [init-table jurl]} (ring.util.codec/form-decode (:query-string request))]
-    (reset! ctx { :db-url jurl :table-names #{init-table} })
+  (let [ {:strs [init-table jurl classname subprotocol subname user password]} (ring.util.codec/form-decode (:query-string request))
+    db-conn-map (if (not-empty jurl) jurl 
+                    {
+                     :classname classname
+                     :subprotocol subprotocol
+                     :subname subname
+                     :user user
+                     :password password
+       })]
+    (reset! ctx { :db-url db-conn-map
+                 :table-names #{init-table} })
     (redirect-to-root)))
 
 (defn handle-reset [request]
